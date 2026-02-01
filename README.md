@@ -388,6 +388,15 @@ Evaluates cluster deployment overhead on a single-node environment.
 **Key Metrics:**
 - Standalone vs Distributed QPS
 - Coordination overhead
+  
+### Experiment 6: Image Anomaly Detection
+
+Real-world use case using the MVTec AD dataset to simulate industrial visual anomaly detection. Normal image embeddings (extracted via DINO vision transformer) are stored in the database, then anomalous images are queried to find similar vectors.
+
+**Key Metrics:**
+- Query throughput (QPS)
+- Average latency
+- Threshold-based neighbor filtering
 
 ## Results
 
