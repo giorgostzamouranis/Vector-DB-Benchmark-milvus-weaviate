@@ -8,7 +8,6 @@ A comprehensive performance benchmarking suite comparing two leading open-source
 
 - [Overview](#overview)
 - [Key Findings](#key-findings)
-- [Architecture](#architecture)
 - [Datasets](#datasets)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
@@ -17,8 +16,8 @@ A comprehensive performance benchmarking suite comparing two leading open-source
   - [Query Benchmarks](#query-benchmarks)
   - [Anomaly Detection](#anomaly-detection)
 - [Experiments](#experiments)
-- [Results Summary](#results-summary)
-- [Contributing](#contributing)
+- [Results](#results)
+- [Hardware & Environment](#hardware--environment)
 - [Authors](#authors)
 - [References](#references)
 
@@ -54,55 +53,6 @@ Both systems use **HNSW (Hierarchical Navigable Small World)** as their primary 
 | **Storage Efficiency** | Weaviate | 2.1×–5.8× smaller disk footprint |
 | **Filtered Search (indexed)** | Milvus | 97.4 QPS vs 69.2 QPS |
 | **Filtered Search (unindexed)** | Weaviate | 61.1 QPS vs 54.7 QPS |
-
-## Architecture
-
-### Milvus: Disaggregated Cloud-Native
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Access Layer                          │
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐                 │
-│  │  Proxy  │  │  Proxy  │  │  Proxy  │  (Stateless)    │
-│  └────┬────┘  └────┬────┘  └────┬────┘                 │
-├───────┼────────────┼────────────┼───────────────────────┤
-│       │     Coordinator Service                         │
-│  ┌────┴────┐  ┌─────────┐  ┌─────────┐  ┌───────────┐  │
-│  │RootCoord│  │DataCoord│  │QueryCord│  │IndexCoord │  │
-│  └─────────┘  └─────────┘  └─────────┘  └───────────┘  │
-├─────────────────────────────────────────────────────────┤
-│                    Worker Nodes                          │
-│  ┌──────────┐  ┌───────────┐  ┌───────────┐            │
-│  │DataNodes │  │QueryNodes │  │IndexNodes │            │
-│  └──────────┘  └───────────┘  └───────────┘            │
-├─────────────────────────────────────────────────────────┤
-│  Message Storage (Kafka/Pulsar) │ Object Storage (MinIO)│
-└─────────────────────────────────────────────────────────┘
-```
-
-### Weaviate: Unified Monolithic
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                   Weaviate Node                          │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │              gRPC / REST Interface               │    │
-│  └─────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │                 Query Engine                     │    │
-│  │  ┌───────────┐  ┌──────────┐  ┌─────────────┐   │    │
-│  │  │HNSW Index │  │Inverted  │  │ Roaring     │   │    │
-│  │  │(Go impl.) │  │Index     │  │ Bitmaps     │   │    │
-│  │  └───────────┘  └──────────┘  └─────────────┘   │    │
-│  └─────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │           LSM-Tree Storage Engine               │    │
-│  │  ┌─────────┐  ┌───────┐  ┌──────────────────┐   │    │
-│  │  │MemTable │  │  WAL  │  │    SSTables      │   │    │
-│  │  └─────────┘  └───────┘  └──────────────────┘   │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-```
 
 ## Datasets
 
@@ -223,6 +173,8 @@ curl http://localhost:8080/v1/.well-known/ready
 ```
 
 ## Usage
+
+> **Note**: The commands below are **indicative examples**. You can parametrize them for different datasets, collection names, batch sizes, EF values, parallelism levels, etc.
 
 ### Data Ingestion
 
@@ -419,7 +371,6 @@ Analyzes the recall-latency trade-off by varying the HNSW search depth parameter
 
 **Key Metrics:**
 - Recall@K
-- MRR@K
 - Average latency (ms)
 
 ### Experiment 4: Hybrid Search (Filtered)
@@ -438,29 +389,16 @@ Evaluates cluster deployment overhead on a single-node environment.
 - Standalone vs Distributed QPS
 - Coordination overhead
 
-## Results Summary
+## Results
 
-### Ingestion Throughput (Arxiv-384, 2.2M vectors)
+Detailed experimental results, performance metrics, and analysis are extensively documented in our **[research paper](./vectordb_paper.pdf)** included in this repository. The paper covers:
 
-| Database | Throughput | Index Build Time |
-|----------|------------|------------------|
-| Milvus | 875 vec/sec | 86.1% of total time |
-| Weaviate | 428 vec/sec | Included (online) |
-
-### Query Performance (GloVe-100, EF=256, P=8)
-
-| Database | QPS | Recall@100 |
-|----------|-----|------------|
-| Milvus | 425.2 | 0.9066 |
-| Weaviate | 436.6 | 0.8951 |
-
-### Storage Footprint (Full datasets)
-
-| Dataset | Milvus | Weaviate | Ratio |
-|---------|--------|----------|-------|
-| GloVe-100 | 2,500 MB | 980 MB | 2.6× |
-| Arxiv-384 | 7,100 MB | 1,800 MB | 3.9× |
-| H&M-2048 | 3,200 MB | 550 MB | 5.8× |
+- Ingestion throughput comparisons across all datasets
+- Query performance (QPS, latency) under various configurations
+- Recall vs latency trade-offs with EF parameter tuning
+- Storage footprint analysis
+- Distributed mode overhead evaluation
+- Anomaly detection experiment findings
 
 ## Hardware & Environment
 
@@ -475,6 +413,7 @@ Our experiments were conducted on:
 | Virtualization | **Docker Desktop v28.5.1** with WSL2 backend |
 | WSL2 Kernel | Linux 6.6.87.2-microsoft-standard |
 
+> **Note**: Vector databases were deployed as Docker containers running on WSL2. This setup simulates a cloud-native deployment while maintaining hardware isolation. Docker volumes were stored inside WSL2 to avoid performance penalties from Windows host directory mounting (Plan 9 protocol).
 
 ## Authors
 
