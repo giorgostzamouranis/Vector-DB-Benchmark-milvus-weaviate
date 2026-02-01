@@ -1,11 +1,8 @@
 # Vector Database Benchmark: Milvus vs Weaviate
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 A comprehensive performance benchmarking suite comparing two leading open-source vector databases: **Milvus** and **Weaviate**. This project evaluates ingestion throughput, query performance, recall accuracy, storage efficiency, and distributed scaling behavior.
 
-> 📄 **Academic Project**: Developed for the "Information Systems, Analysis and Design" course at ECE NTUA (Team 35)
+**Academic Project**: Developed for the "Information Systems, Analysis and Design" course at ECE NTUA (Team 35)
 
 ## 📋 Table of Contents
 
@@ -120,52 +117,74 @@ All datasets use `float32` vectors with **Cosine Similarity** as the distance me
 
 ## Project Structure
 
+This project is built on top of the [qdrant/vector-db-benchmark](https://github.com/qdrant/vector-db-benchmark) repository. We cloned the original benchmark suite and added our custom implementations inside it.
+
 ```
-vector-db-benchmark/
-├── custom/                          # Our benchmark implementations
-│   ├── anomaly_detection/           # MVTec AD dataset vectors
-│   │   ├── anomaly/                 # Anomalous image embeddings
-│   │   └── good/                    # Normal image embeddings
-│   ├── results/                     # Benchmark results (JSON)
-│   │   ├── ingest/
-│   │   └── queries/
-│   ├── ingest_default_milvus.py     # Raw ingestion (no index)
-│   ├── ingest_indexing_milvus.py    # Ingestion with HNSW index
-│   ├── ingest_filters_milvus.py     # Ingestion with metadata
-│   ├── ingest_weaviate.py           # Weaviate standard ingestion
-│   ├── ingest_weaviate_distributed.py
-│   ├── ingest_filters_weaviate.py
-│   ├── ingest_anom_det_milvus.py    # Anomaly detection setup
-│   ├── ingest_anom_det_weaviate.py
-│   ├── milvus_parallel_queries.py   # Parallel query benchmark
-│   ├── weaviate_parallel_queries.py
-│   ├── milvus_filter_queries.py     # Filtered search benchmark
-│   ├── weaviate_filter_queries.py
-│   ├── milvus_anom_queries.py       # Anomaly detection queries
-│   ├── weaviate_anom_queries.py
-│   └── load_dataset.py              # Dataset loading utilities
-├── datasets/                        # Downloaded datasets
-├── milvus/                          # Milvus Docker volumes
-│   └── volumes/
-├── weaviate/                        # Weaviate Docker volumes
-│   └── volumes/
-└── docker-compose.yml               # Container orchestration
+vector_benchmark/                    # Root project folder
+├── milvus/                          # Milvus Docker deployment
+│   └── volumes/                     # Persistent storage (etcd, minio, data)
+├── weaviate/                        # Weaviate Docker deployment
+│   └── volumes/                     # Persistent storage
+└── scripts/
+    └── vector-db-benchmark/         # 🔗 Cloned from qdrant/vector-db-benchmark
+        ├── benchmark/               # Original benchmark framework
+        ├── dataset_reader/          # Original dataset parsing utilities
+        ├── datasets/                # Downloaded datasets (GloVe, Arxiv, H&M)
+        ├── engine/                  # Original DB client implementations
+        │   ├── clients/
+        │   │   ├── milvus/
+        │   │   ├── weaviate/
+        │   │   └── ...
+        │   └── servers/             # Docker configs for each DB
+        │       ├── milvus-single-node/
+        │       ├── weaviate-single-node/
+        │       └── ...
+        │
+        └── custom/                  # ⭐ OUR IMPLEMENTATIONS
+            ├── anomaly_detection/   # MVTec AD anomaly detection experiment
+            │   ├── anomaly/         # Anomalous image embeddings (JSON)
+            │   ├── good/            # Normal image embeddings (JSON)
+            │   ├── ingest_anom_det_milvus.py    # Ingest normal vectors
+            │   ├── ingest_anom_det_weaviate.py
+            │   ├── milvus_anom_queries.py       # Query with anomalous vectors
+            │   └── weaviate_anom_queries.py
+            ├── results/             # Benchmark results output
+            │   ├── ingest/          # Ingestion metrics (JSON)
+            │   └── queries/         # Query metrics (JSON)
+            │
+            │── load_dataset.py              # Dataset loading utilities
+            │
+            │── # Ingestion Scripts
+            ├── ingest_default_milvus.py     # Raw ingestion (no index)
+            ├── ingest_indexing_milvus.py    # Ingestion with HNSW index
+            ├── ingest_filters_milvus.py     # Ingestion with metadata fields
+            ├── ingest_weaviate.py           # Weaviate standard ingestion
+            ├── ingest_weaviate_distributed.py # Weaviate cluster mode
+            ├── ingest_filters_weaviate.py   # Weaviate with metadata
+            │
+            │── # Query Benchmark Scripts
+            ├── milvus_parallel_queries.py   # Parallel query benchmark
+            ├── weaviate_parallel_queries.py
+            ├── milvus_filter_queries.py     # Filtered (hybrid) search
+            └── weaviate_filter_queries.py
 ```
+
+> **Note**: Our custom scripts leverage the original repository's `benchmark.dataset`, `benchmark.config_read`, and `dataset_reader` modules for dataset handling.
 
 ## Installation
 
 ### Prerequisites
 
 - Python 3.9+
-- Docker & Docker Compose
+- Docker Desktop (with WSL2 backend on Windows)
 - Poetry (Python package manager)
-- 8+ GB RAM recommended
+- 8+ GB RAM recommended (we allocated 7.6 GB to Docker/WSL2)
 - NVMe SSD for storage benchmarks
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/vector-db-benchmark.git
+git clone https://github.com/giorgostzamouranis/vector-db-benchmark.git
 cd vector-db-benchmark/scripts/vector-db-benchmark
 ```
 
@@ -356,17 +375,6 @@ python -m custom.weaviate_anom_queries \
     --use-filter
 ```
 
-### Utility Commands
-
-#### Check Storage Usage
-
-**Milvus**:
-```powershell
-(Get-ChildItem -Recurse ".\milvus\volumes" | Measure-Object -Property Length -Sum).Sum / 1MB
-```
-
-**Weaviate**: Check collection size via API or inspect `./weaviate/volumes/data/`
-
 #### Reset Database
 
 **Milvus**:
@@ -454,47 +462,35 @@ Evaluates cluster deployment overhead on a single-node environment.
 | Arxiv-384 | 7,100 MB | 1,800 MB | 3.9× |
 | H&M-2048 | 3,200 MB | 550 MB | 5.8× |
 
-## Hardware Requirements
+## Hardware & Environment
 
 Our experiments were conducted on:
 
 | Component | Specification |
 |-----------|---------------|
-| CPU | AMD Ryzen 7 4800H (8 cores, 16 threads) |
-| RAM | 16 GB (7.6 GB allocated to Docker/WSL2) |
+| CPU | AMD Ryzen 7 4800H (8 cores, 16 threads @ 2.90 GHz) |
+| RAM | 16 GB (7.6 GB allocated to Docker) |
 | Storage | 512 GB NVMe SSD |
-| OS | Windows 11 + WSL2 |
+| OS | Windows 11 Home |
+| Virtualization | **Docker Desktop v28.5.1** with WSL2 backend |
+| WSL2 Kernel | Linux 6.6.87.2-microsoft-standard |
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/new-benchmark`)
-3. Commit your changes (`git commit -am 'Add new benchmark'`)
-4. Push to the branch (`git push origin feature/new-benchmark`)
-5. Create a Pull Request
 
 ## Authors
 
 **Team 35 - ECE NTUA**
 
-- Andreas Fotakis (AM: 03121100)
-- Nikolaos Katsaidonis (AM: 03121868)
-- George Tzamouranis (AM: 03121141)
+- Andreas Fotakis (AM: 03121100) https://github.com/andreasfott
+- Nikolaos Katsaidonis (AM: 03121868) https://github.com/NikosK10
+- Georgios Tzamouranis (AM: 03121141) https://github.com/giorgostzamouranis
 
 ## References
 
 1. [Vector-DB-Benchmark (qdrant)](https://github.com/qdrant/vector-db-benchmark) - Base framework
 2. [Milvus Documentation](https://milvus.io/docs)
 3. [Weaviate Documentation](https://weaviate.io/developers/weaviate)
-4. [HNSW Paper](https://arxiv.org/abs/1603.09320) - Malkov & Yashunin
+4. [HNSW Paper](https://arxiv.org/abs/1603.09320)
 5. [MVTec AD Dataset](https://www.mvtec.com/company/research/datasets/mvtec-ad)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-<p align="center">
-  <i>Built with ❤️ at ECE NTUA</i>
-</p>
