@@ -1,0 +1,34 @@
+.idea/
+.pytest_cache/
+__pycache__
+*.pyc
+NOTES.md
+
+results/*
+tools/custom/data.json
+
+ansible/playbooks/inventory.ini
+
+# Data volumes (large, generated)
+**/volumes/
+milvus/volumes/
+weaviate/volumes/
+
+# Datasets (users download themselves)
+datasets/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db

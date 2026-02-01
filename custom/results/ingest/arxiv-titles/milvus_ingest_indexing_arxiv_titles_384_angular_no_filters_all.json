@@ -1,0 +1,14 @@
+{
+  "db": "milvus",
+  "dataset": "arxiv-titles-384-angular-no-filters",
+  "loaded_vectors": 2138591,
+  "dimension": 384,
+  "batch_size": 2000,
+  "vector_load_time_sec": 1179.0703557000088,
+  "index_build_time_sec": 1718.2562685000012,
+  "total_search_ready_time_sec": 2897.32662420001,
+  "throughput_vec_per_sec": 738.123942232720525,
+  "index_type": "HNSW",
+  "index_build_mode": "offline",
+  "collection": "arxiv_titles_384_angular_no_filters_all"
+}

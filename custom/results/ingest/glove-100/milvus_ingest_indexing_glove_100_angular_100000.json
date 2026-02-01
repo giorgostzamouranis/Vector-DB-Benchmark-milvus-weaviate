@@ -1,0 +1,14 @@
+{
+  "db": "milvus",
+  "dataset": "glove-100-angular",
+  "loaded_vectors": 100000,
+  "dimension": 100,
+  "batch_size": 2000,
+  "vector_load_time_sec": 6.291099800000666,
+  "index_build_time_sec": 42.022959800000535,
+  "total_search_ready_time_sec": 48.9213954999956,
+  "throughput_vec_per_sec": 2044.104899927624,
+  "index_type": "HNSW",
+  "index_build_mode": "offline",
+  "collection": "glove_100_angular_100000"
+}

@@ -1,0 +1,13 @@
+{
+  "db": "weaviate",
+  "dataset": "glove-100-angular",
+  "loaded_vectors": 100000,
+  "dimension": 100,
+  "batch_size": 2000,
+  "total_search_ready_time_sec": 73.2193387999996,
+  "throughput_vec_per_sec": 1365.7593968876504,
+  "index_type": "HNSW",
+  "index_build_mode": "online",
+  "load_includes_index": true,
+  "class": "Glove100angular100000"
+}

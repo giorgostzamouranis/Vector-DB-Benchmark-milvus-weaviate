@@ -1,0 +1,16 @@
+qdrant_python_client_version: "1.14.0"
+logging_dir: "/tmp/logs"
+working_dir: "/tmp/experiments"
+# Default dataset value (can be overridden via --extra-vars)
+dataset_name: "dbpedia_openai_100K"
+servers:
+  - name: "qdrant"
+    registry: "ghcr.io"
+    image: "qdrant/qdrant"
+    version: "dev"
+    feature_flags: "true"
+  - name: "qdrant"
+    registry: "docker.io"
+    image: "qdrant/qdrant"
+    version: "master"
+    feature_flags: "false"

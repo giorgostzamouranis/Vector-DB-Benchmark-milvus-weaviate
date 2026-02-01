@@ -1,0 +1,27 @@
+{
+  "db": "weaviate",
+  "dataset": "arxiv-titles-384-angular-no-filters",
+  "class": "Arxivtitles384angularnofiltersall",
+  "topk": 10,
+  "n_queries": 15000,
+  "ef": 512,
+  "parallel": 1,
+  "total_time_sec": 254.7692468999885,
+  "throughput": 59.9496118264171,
+  "latency_ms": {
+    "avg": 17.49018491331565,
+    "min": 19.639400008600205,
+    "max": 130.62169999466278
+  },
+  "cpu": {
+    "psutil_available": false,
+    "process_cpu_avg_pct": null,
+    "system_cpu_avg_pct": null
+  },
+  "quality_vs_ground_truth": {
+    "ground_truth_available_queries": 15000,
+    "recall_at_k_avg": 0.998999999999992,
+    "mrr_at_k_avg": 0.9999333333333333,
+    "hit_rate_at_k": 0.9999333333333333
+  }
+}

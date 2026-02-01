@@ -1,0 +1,13 @@
+{
+  "db": "weaviate",
+  "dataset": "arxiv-titles-384-angular-no-filters",
+  "loaded_vectors": 20000,
+  "dimension": 384,
+  "batch_size": 500,
+  "total_search_ready_time_sec": 28.1453451999987,
+  "throughput_vec_per_sec": 710.5970759243316,
+  "index_type": "HNSW",
+  "index_build_mode": "online",
+  "load_includes_index": true,
+  "class": "Arxivtitles384angularnofilters20000"
+}

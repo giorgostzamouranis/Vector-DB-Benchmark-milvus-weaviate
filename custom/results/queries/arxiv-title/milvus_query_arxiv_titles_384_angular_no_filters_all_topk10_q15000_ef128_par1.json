@@ -1,0 +1,28 @@
+{
+  "db": "milvus",
+  "dataset": "arxiv-titles-384-angular-no-filters",
+  "collection": "arxiv_titles_384_angular_no_filters_all",
+  "topk": 10,
+  "n_queries": 15000,
+  "metric": "COSINE",
+  "ef": 128,
+  "parallel": 1,
+  "total_time_sec": 117.13128200001665,
+  "throughput": 128.8211956893129,
+  "latency_ms": {
+    "avg": 8.207767240002674,
+    "min": 6.192499975441024,
+    "max": 15.795100014656782
+  },
+  "cpu": {
+    "psutil_available": false,
+    "process_cpu_avg_pct": null,
+    "system_cpu_avg_pct": null
+  },
+  "quality_vs_ground_truth": {
+    "ground_truth_available_queries": 15000,
+    "recall_at_k_avg": 0.9982666666666627,
+    "mrr_at_k_avg": 1.0,
+    "hit_rate_at_k": 1.0
+  }
+}

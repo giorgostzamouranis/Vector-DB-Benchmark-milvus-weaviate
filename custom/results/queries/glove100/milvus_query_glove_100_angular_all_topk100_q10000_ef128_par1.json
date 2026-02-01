@@ -1,0 +1,28 @@
+{
+  "db": "milvus",
+  "dataset": "glove-100-angular",
+  "collection": "glove_100_angular_all",
+  "topk": 100,
+  "n_queries": 10000,
+  "metric": "COSINE",
+  "ef": 128,
+  "parallel": 1,
+  "total_time_sec": 72.5967498,
+  "throughput": 137.05171928528927,
+  "latency_ms": {
+    "avg": 7.2957773280000938,
+    "min": 7.584300000416988,
+    "max": 381.2750999995842
+  },
+  "cpu": {
+    "psutil_available": false,
+    "process_cpu_avg_pct": null,
+    "system_cpu_avg_pct": null
+  },
+  "quality_vs_ground_truth": {
+    "ground_truth_available_queries": 10000,
+    "recall_at_k_avg": 0.806687999999975,
+    "mrr_at_k_avg": 1.0,
+    "hit_rate_at_k": 1.0
+  }
+}

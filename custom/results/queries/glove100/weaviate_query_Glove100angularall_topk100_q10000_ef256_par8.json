@@ -1,0 +1,27 @@
+{
+  "db": "weaviate",
+  "dataset": "glove-100-angular",
+  "class": "Glove100angularall",
+  "topk": 100,
+  "n_queries": 10000,
+  "ef": 256,
+  "parallel": 8,
+  "total_time_sec": 22.60619979999319,
+  "throughput": 436.53970929302892,
+  "latency_ms": {
+    "avg": 13.43186607005773,
+    "min": 19.17850000609178,
+    "max": 339.68499999900814
+  },
+  "cpu": {
+    "psutil_available": false,
+    "process_cpu_avg_pct": null,
+    "system_cpu_avg_pct": null
+  },
+  "quality_vs_ground_truth": {
+    "ground_truth_available_queries": 10000,
+    "recall_at_k_avg": 0.8695839999999669,
+    "mrr_at_k_avg": 1.0,
+    "hit_rate_at_k": 1.0
+  }
+}

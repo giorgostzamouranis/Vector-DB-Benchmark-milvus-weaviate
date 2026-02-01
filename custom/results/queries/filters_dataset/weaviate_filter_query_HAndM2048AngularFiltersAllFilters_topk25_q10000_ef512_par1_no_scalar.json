@@ -1,0 +1,28 @@
+{
+  "db": "weaviate",
+  "mode": "filtered_vector_search",
+  "dataset": "h-and-m-2048-angular-filters",
+  "class": "HAndM2048AngularFiltersAllFilters",
+  "topk": 25,
+  "n_queries": 10000,
+  "ef": 512,
+  "parallel": 1,
+  "total_time_sec": 163.0056542000002,
+  "throughput": 61.1291741346077597,
+  "latency_ms": {
+    "avg": 16.933522060000045,
+    "min": 12.771199999406235,
+    "max": 195.506099999875
+  },
+  "cpu": {
+    "psutil_available": false,
+    "process_cpu_avg_pct": null,
+    "system_cpu_avg_pct": null
+  },
+  "quality_vs_ground_truth": {
+    "ground_truth_available_queries": 10000,
+    "recall_at_k_avg": 0.9336880000000015,
+    "mrr_at_k_avg": 1.0,
+    "hit_rate_at_k": 1.0
+  }
+}

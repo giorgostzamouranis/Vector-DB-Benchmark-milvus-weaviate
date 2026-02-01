@@ -1,0 +1,28 @@
+{
+  "db": "milvus",
+  "dataset": "h-and-m-2048-angular-filters",
+  "collection": "h_and_m_2048_angular_filters_all_filters",
+  "topk": 25,
+  "n_queries": 10000,
+  "metric": "COSINE",
+  "ef": 512,
+  "parallel": 1,
+  "total_time_sec": 97.53423739999994,
+  "throughput": 102.52809953276987,
+  "latency_ms": {
+    "avg": 9.752298940000182,
+    "min": 5.787300000065443,
+    "max": 235.64029999988634
+  },
+  "cpu": {
+    "psutil_available": false,
+    "process_cpu_avg_pct": null,
+    "system_cpu_avg_pct": null
+  },
+  "quality_vs_ground_truth": {
+    "ground_truth_available_queries": 10000,
+    "recall_at_k_avg": 0.055016000000000585,
+    "mrr_at_k_avg": 0.08504142856957984,
+    "hit_rate_at_k": 0.2396
+  }
+}
