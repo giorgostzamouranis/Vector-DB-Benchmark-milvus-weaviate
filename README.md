@@ -400,7 +400,7 @@ Real-world use case using the MVTec AD dataset to simulate industrial visual ano
 
 ## Results
 
-Detailed experimental results, performance metrics, and analysis are extensively documented in our **[research paper](./vectordb_paper.pdf)** included in this repository. The paper covers:
+Detailed experimental results, performance metrics, and analysis are extensively documented in our **[research paper](./Vector_DB_Project_Team35.pdf)** included in this repository. The paper covers:
 
 - Ingestion throughput comparisons across all datasets
 - Query performance (QPS, latency) under various configurations
